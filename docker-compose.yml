@@ -1,0 +1,129 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: respondr-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      SA_PASSWORD: ${RESPONDR_SQL_SA_PASSWORD:-Respondr_dev_12345!}
+    ports:
+      - "1433:1433"
+    volumes:
+      - respondr-sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$${SA_PASSWORD}\" -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 25s
+
+  identity-api:
+    build:
+      context: .
+      dockerfile: backend/src/Hosts/Respondr.Identity.Api/Dockerfile
+    container_name: respondr-identity-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__ApplyMigrations: "true"
+      ConnectionStrings__RespondrDb: Server=sqlserver,1433;Database=RespondrDb;User Id=sa;Password=${RESPONDR_SQL_SA_PASSWORD:-Respondr_dev_12345!};TrustServerCertificate=True;Encrypt=False
+      Jwt__Issuer: ${RESPONDR_JWT_ISSUER:-respondr.local}
+      Jwt__Audience: ${RESPONDR_JWT_AUDIENCE:-respondr.clients}
+      Jwt__Key: ${RESPONDR_JWT_KEY:-Respondr_Local_Development_Key_1234567890}
+    ports:
+      - "8081:8080"
+
+  incidents-api:
+    build:
+      context: .
+      dockerfile: backend/src/Hosts/Respondr.Incidents.Api/Dockerfile
+    container_name: respondr-incidents-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__ApplyMigrations: "false"
+      ConnectionStrings__RespondrDb: Server=sqlserver,1433;Database=RespondrDb;User Id=sa;Password=${RESPONDR_SQL_SA_PASSWORD:-Respondr_dev_12345!};TrustServerCertificate=True;Encrypt=False
+      Jwt__Issuer: ${RESPONDR_JWT_ISSUER:-respondr.local}
+      Jwt__Audience: ${RESPONDR_JWT_AUDIENCE:-respondr.clients}
+      Jwt__Key: ${RESPONDR_JWT_KEY:-Respondr_Local_Development_Key_1234567890}
+    ports:
+      - "8082:8080"
+
+  dispatch-api:
+    build:
+      context: .
+      dockerfile: backend/src/Hosts/Respondr.Dispatch.Api/Dockerfile
+    container_name: respondr-dispatch-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__ApplyMigrations: "false"
+      ConnectionStrings__RespondrDb: Server=sqlserver,1433;Database=RespondrDb;User Id=sa;Password=${RESPONDR_SQL_SA_PASSWORD:-Respondr_dev_12345!};TrustServerCertificate=True;Encrypt=False
+      Jwt__Issuer: ${RESPONDR_JWT_ISSUER:-respondr.local}
+      Jwt__Audience: ${RESPONDR_JWT_AUDIENCE:-respondr.clients}
+      Jwt__Key: ${RESPONDR_JWT_KEY:-Respondr_Local_Development_Key_1234567890}
+    ports:
+      - "8083:8080"
+
+  resources-api:
+    build:
+      context: .
+      dockerfile: backend/src/Hosts/Respondr.Resources.Api/Dockerfile
+    container_name: respondr-resources-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__ApplyMigrations: "false"
+      ConnectionStrings__RespondrDb: Server=sqlserver,1433;Database=RespondrDb;User Id=sa;Password=${RESPONDR_SQL_SA_PASSWORD:-Respondr_dev_12345!};TrustServerCertificate=True;Encrypt=False
+      Jwt__Issuer: ${RESPONDR_JWT_ISSUER:-respondr.local}
+      Jwt__Audience: ${RESPONDR_JWT_AUDIENCE:-respondr.clients}
+      Jwt__Key: ${RESPONDR_JWT_KEY:-Respondr_Local_Development_Key_1234567890}
+    ports:
+      - "8084:8080"
+
+  notifications-api:
+    build:
+      context: .
+      dockerfile: backend/src/Hosts/Respondr.Notifications.Api/Dockerfile
+    container_name: respondr-notifications-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__ApplyMigrations: "false"
+      ConnectionStrings__RespondrDb: Server=sqlserver,1433;Database=RespondrDb;User Id=sa;Password=${RESPONDR_SQL_SA_PASSWORD:-Respondr_dev_12345!};TrustServerCertificate=True;Encrypt=False
+      Jwt__Issuer: ${RESPONDR_JWT_ISSUER:-respondr.local}
+      Jwt__Audience: ${RESPONDR_JWT_AUDIENCE:-respondr.clients}
+      Jwt__Key: ${RESPONDR_JWT_KEY:-Respondr_Local_Development_Key_1234567890}
+    ports:
+      - "8085:8080"
+
+  realtime-api:
+    build:
+      context: .
+      dockerfile: backend/src/Hosts/Respondr.Realtime.Api/Dockerfile
+    container_name: respondr-realtime-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__ApplyMigrations: "false"
+      ConnectionStrings__RespondrDb: Server=sqlserver,1433;Database=RespondrDb;User Id=sa;Password=${RESPONDR_SQL_SA_PASSWORD:-Respondr_dev_12345!};TrustServerCertificate=True;Encrypt=False
+      Jwt__Issuer: ${RESPONDR_JWT_ISSUER:-respondr.local}
+      Jwt__Audience: ${RESPONDR_JWT_AUDIENCE:-respondr.clients}
+      Jwt__Key: ${RESPONDR_JWT_KEY:-Respondr_Local_Development_Key_1234567890}
+    ports:
+      - "8086:8080"
+
+volumes:
+  respondr-sqlserver-data:

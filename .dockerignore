@@ -1,0 +1,7 @@
+**/bin/
+**/obj/
+.git/
+.codex/
+.vs/
+node_modules/
+docker-data/
