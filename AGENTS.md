@@ -155,3 +155,12 @@ Before finishing a change, agents should check:
 - Docker-related files remain consistent where applicable.
 
 Keep the repository simple, professional, and explainable in an interview.
+
+## Project Review Agents
+
+Reusable pre-PR agent prompts live in `.codex/agents/`.
+
+- `review`: Lead Developer review agent for architecture, maintainability, project boundaries, API shape, and build/test risk.
+- `quality-check`: Staff QA / Principal-level quality agent for acceptance criteria, test coverage, edge cases, regression risk, and release readiness.
+
+Human-readable agent descriptions live in `docs/development/agents/`.
