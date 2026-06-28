@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Respondr.Application\Respondr.Application.csproj" />
+    <ProjectReference Include="..\..\Core\Respondr.Infrastructure\Respondr.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Respondr.Contracts\Respondr.Contracts.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Respondr.Shared\Respondr.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
