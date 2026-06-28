@@ -1,0 +1,80 @@
+title: Respondr - System Architecture
+
+direction: right
+
+user: {
+  label: "User Browser"
+  icon: "https://icons.terrastruct.com/azure%2FGeneral%20Service%20Icons%2FTwo%20User%20Icon.svg"
+  width: 110
+  height: 110
+  shape: image
+}
+
+frontend: {
+  label: "Angular Frontend\nRespondr Web UI"
+  icon: "https://icons.terrastruct.com/azure%2FIdentity%20Service%20Color%2FEnterprise%20Applications.svg"
+  width: 100
+  height: 100
+  shape: image
+}
+
+backend: {
+  label: "Backend"
+  icon: "https://cdn.simpleicons.org/dotnet"
+
+  rest_api: {
+    label: "REST API \n Auth, Incidents, Units, Assignments"
+    shape: image
+    icon: "https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FAPI%20Management%20Services.svg"
+    width: 100
+    height: 100
+  }
+
+  signalr: {
+    label: "SignalR Hub\nLive Updates"
+    shape: image
+    icon: "https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FSignalR.svg"
+    width: 100
+    height: 100
+  }
+}
+
+database: {
+  label: "SQL Database\nUsers, Incidents, Units, Assignments"
+  shape: image
+  icon: "https://icons.terrastruct.com/azure%2FDatabases%20Service%20Color%2FSQL%20Server%20stretch%20Databases.svg"
+  width: 150
+  height: 150
+}
+
+hosting: {
+  label: "Azure / Docker Hosting"
+
+  frontend_host: {
+    label: "Frontend Host"
+    icon: "https://icons.terrastruct.com/azure%2FStorage%20Service%20Color%2FAzure%20NetApp%20files.svg"
+  }
+
+  backend_host: {
+    label: "Backend Host"
+    icon: "https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Services.svg"
+  }
+
+  database_host: {
+    label: "Database Host"
+    icon: "https://icons.terrastruct.com/azure%2FDatabases%20Service%20Color%2FAzure%20Database%20%28Generic%29.svg"
+  }
+}
+
+user -> frontend: "Loads UI"
+
+frontend -> backend.rest_api: "HTTPS API calls"
+frontend -> backend.signalr: "WebSocket connection"
+
+backend.rest_api -> database: "Read / write data"
+backend.rest_api -> backend.signalr: "Send update after changes"
+backend.signalr -> frontend: "Push live updates"
+
+hosting.frontend_host -> frontend: "Hosts Angular"
+hosting.backend_host -> backend: "Hosts API + SignalR"
+hosting.database_host -> database: "Hosts SQL Database"
