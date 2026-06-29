@@ -30,6 +30,20 @@ public sealed class IncidentLocation : Entity
 
     public double? Longitude { get; private set; }
 
+    public void UpdateAddress(
+        string address,
+        string? city = null,
+        string? region = null,
+        double? latitude = null,
+        double? longitude = null)
+    {
+        Address = address;
+        City = city;
+        Region = region;
+        Latitude = latitude;
+        Longitude = longitude;
+    }
+
     private IncidentLocation()
         : base(Guid.Empty)
     {

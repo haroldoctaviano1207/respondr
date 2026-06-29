@@ -29,6 +29,32 @@ public sealed class ResponderProfile : AuditableEntity
 
     public Guid? CurrentIncidentId { get; private set; }
 
+    public void UpdateStatus(ResponderStatus status, DateTimeOffset updatedAt)
+    {
+        Status = status;
+
+        if (status == ResponderStatus.Available)
+        {
+            CurrentIncidentId = null;
+        }
+
+        MarkUpdated(updatedAt);
+    }
+
+    public void AssignToIncident(Guid incidentId, ResponderStatus status, DateTimeOffset updatedAt)
+    {
+        CurrentIncidentId = incidentId;
+        Status = status;
+        MarkUpdated(updatedAt);
+    }
+
+    public void ReleaseFromIncident(DateTimeOffset updatedAt)
+    {
+        CurrentIncidentId = null;
+        Status = ResponderStatus.Available;
+        MarkUpdated(updatedAt);
+    }
+
     private ResponderProfile()
         : base(Guid.Empty)
     {

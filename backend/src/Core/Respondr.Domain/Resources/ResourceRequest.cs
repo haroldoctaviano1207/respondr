@@ -37,6 +37,42 @@ public sealed class ResourceRequest : AuditableEntity
 
     public DateTimeOffset? RejectedAt { get; private set; }
 
+    public DateTimeOffset? CancelledAt { get; private set; }
+
+    public string? DecisionNotes { get; private set; }
+
+    public void Approve(DateTimeOffset approvedAt, string? notes = null)
+    {
+        Status = ResourceRequestStatus.Approved;
+        ApprovedAt = approvedAt;
+        DecisionNotes = notes;
+        MarkUpdated(approvedAt);
+    }
+
+    public void Allocate(DateTimeOffset allocatedAt, string? notes = null)
+    {
+        Status = ResourceRequestStatus.Allocated;
+        ApprovedAt ??= allocatedAt;
+        DecisionNotes = notes;
+        MarkUpdated(allocatedAt);
+    }
+
+    public void Reject(DateTimeOffset rejectedAt, string? notes = null)
+    {
+        Status = ResourceRequestStatus.Rejected;
+        RejectedAt = rejectedAt;
+        DecisionNotes = notes;
+        MarkUpdated(rejectedAt);
+    }
+
+    public void Cancel(DateTimeOffset cancelledAt, string? notes = null)
+    {
+        Status = ResourceRequestStatus.Cancelled;
+        CancelledAt = cancelledAt;
+        DecisionNotes = notes;
+        MarkUpdated(cancelledAt);
+    }
+
     private ResourceRequest()
         : base(Guid.Empty)
     {

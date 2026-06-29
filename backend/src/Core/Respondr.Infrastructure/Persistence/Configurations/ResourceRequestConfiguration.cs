@@ -14,6 +14,7 @@ public sealed class ResourceRequestConfiguration : IEntityTypeConfiguration<Reso
         builder.Property(x => x.ResourceType).HasConversion<string>().HasMaxLength(50).IsRequired();
         builder.Property(x => x.Quantity).IsRequired();
         builder.Property(x => x.Justification).HasMaxLength(1000).IsRequired();
+        builder.Property(x => x.DecisionNotes).HasMaxLength(1000);
         builder.Property(x => x.Status).HasConversion<string>().HasMaxLength(30).IsRequired();
     }
 }

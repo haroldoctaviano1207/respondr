@@ -1,3 +1,5 @@
+extern alias identityapi;
+
 namespace Respondr.Api.Tests.Identity;
 
 using System.Net;
@@ -113,7 +115,7 @@ public sealed class IdentityApiTests : IClassFixture<IdentityApiFactory>
     }
 }
 
-public sealed class IdentityApiFactory : WebApplicationFactory<Program>
+public sealed class IdentityApiFactory : WebApplicationFactory<identityapi::Program>
 {
     protected override IHost CreateHost(IHostBuilder builder)
     {
