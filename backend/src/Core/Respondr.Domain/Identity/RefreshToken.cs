@@ -27,6 +27,12 @@ public sealed class RefreshToken : AuditableEntity
 
     public bool IsRevoked => RevokedAt.HasValue;
 
+    public void Revoke(DateTimeOffset revokedAt)
+    {
+        RevokedAt = revokedAt;
+        MarkUpdated(revokedAt);
+    }
+
     private RefreshToken()
         : base(Guid.Empty)
     {
