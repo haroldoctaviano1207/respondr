@@ -25,6 +25,16 @@ public sealed class IncidentsApiTests : IClassFixture<IncidentsApiFactory>
     }
 
     [Fact]
+    public async Task Health_endpoints_return_healthy_status()
+    {
+        var healthResponse = await _client.GetAsync("/api/health");
+        var databaseHealthResponse = await _client.GetAsync("/api/health/db");
+
+        Assert.Equal(HttpStatusCode.OK, healthResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, databaseHealthResponse.StatusCode);
+    }
+
+    [Fact]
     public async Task Incident_list_returns_paged_results()
     {
         var createResponse = await _client.PostAsJsonAsync("/api/incidents", new CreateIncidentRequest(

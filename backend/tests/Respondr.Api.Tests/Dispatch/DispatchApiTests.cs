@@ -32,6 +32,16 @@ public sealed class DispatchApiTests : IClassFixture<DispatchApiFactory>
     }
 
     [Fact]
+    public async Task Health_endpoints_return_healthy_status()
+    {
+        var healthResponse = await _client.GetAsync("/api/health");
+        var databaseHealthResponse = await _client.GetAsync("/api/health/db");
+
+        Assert.Equal(HttpStatusCode.OK, healthResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, databaseHealthResponse.StatusCode);
+    }
+
+    [Fact]
     public async Task Assignment_rejects_unavailable_responder()
     {
         var (incidentId, responderId) = await _factory.SeedIncidentAndResponderAsync(ResponderStatus.Unavailable);
