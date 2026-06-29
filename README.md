@@ -55,9 +55,7 @@ respondr/
   .gitignore
 ```
 
-The documentation currently defines the intended product, user workflows, architecture, data model, API surface, real-time behavior, deployment direction, and CI/CD quality checks.
-
-Source code, Docker files, deployment assets, and CI/CD configuration will be added later.
+The repository now includes the modular-monolith backend implementation, API host Dockerfiles, root `docker-compose.yml`, and automated tests for domain, application, and API behavior.
 
 ## Documentation Index
 
@@ -101,14 +99,26 @@ The database design should support auditability. Important operational changes s
 
 ## Local Setup
 
-Local setup is planned to use Docker Compose with separate services for:
+Local setup currently uses Docker Compose with:
 
-- Angular frontend
-- .NET API
-- Database
+- SQL Server
+- Respondr Identity API
+- Respondr Incidents API
+- Respondr Dispatch API
+- Respondr Resources API
+- Respondr Notifications API
+- Respondr Realtime API
 
-Exact Docker files, environment variables, and commands will be added when the implementation structure is created.
+Typical local verification commands:
+
+```powershell
+docker compose config
+docker compose up -d --build
+dotnet test backend/Respondr.sln
+```
+
+The frontend container is intentionally out of scope for the current milestone because the Angular project is not yet present in this working tree.
 
 ## Status
 
-This repository is currently in planning and documentation setup. Implementation work will follow the documented architecture and task breakdown.
+This repository currently contains backend milestone implementation with Docker-first local orchestration. Azure deployment remains intentionally deferred until after local Docker validation is complete.

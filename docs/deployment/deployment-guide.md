@@ -4,7 +4,7 @@
 
 This document describes the planned deployment direction for Respondr. It covers the intended local Docker setup and the later Azure deployment shape.
 
-This is a design document only. Dockerfiles, `docker-compose.yml`, Azure configuration, and CI/CD pipeline files will be added later.
+This guide now reflects the current local Docker-first implementation and the planned later Azure direction.
 
 ## Deployment Goals
 
@@ -29,59 +29,50 @@ Respondr is planned as three primary runtime services:
 
 ## Local Docker Design
 
-Local development should eventually use Docker Compose to run:
+Local development currently uses Docker Compose to run:
 
-- Frontend container
-- Backend container
-- Database container
+- SQL Server container
+- Identity API container
+- Incidents API container
+- Dispatch API container
+- Resources API container
+- Notifications API container
+- Realtime API container
 
 Recommended local flow:
 
 ```text
 Developer browser
-  -> Angular frontend container
-  -> .NET API container
-  -> Database container
+  -> API containers on published localhost ports
+  -> SQL Server container
 
-Angular frontend
-  -> REST API over internal/local HTTP
-  -> SignalR hub over WebSocket
+Future Angular frontend
+  -> REST API over local Docker-exposed HTTP
+  -> SignalR hub over WebSocket or Long Polling
 ```
 
 ## Local Service Responsibilities
 
 ### Frontend Container
 
-Responsibilities:
-
-- Serve the Angular application.
-- Point API calls to the backend container or local backend URL.
-- Support development-friendly rebuild behavior when configured.
-
-Possible approaches:
-
-- Development mode using Angular dev server.
-- Production-like mode using built static files served by Nginx or similar.
-
-The implementation decision can be made when source code is created.
+No frontend container is included in the current milestone because the Angular project is not yet present in this repository.
 
 ### Backend Container
 
 Responsibilities:
 
-- Run the .NET Web API.
-- Expose REST endpoints.
-- Expose SignalR hub.
-- Run EF Core migrations manually or through a controlled startup process.
-- Connect to the database using environment variables.
+- Run each .NET API host in its own container.
+- Expose REST endpoints and SignalR hubs on consistent published ports.
+- Apply EF Core migrations from the Identity API container.
+- Connect to SQL Server using environment variables from Docker Compose.
 
 ### Database Container
 
 Responsibilities:
 
-- Provide local SQL Server or PostgreSQL.
+- Provide local SQL Server.
 - Persist data using a Docker volume.
-- Support local seed data for development and testing.
+- Support API connectivity checks through container health and DB health endpoints.
 
 ## Environment Variables
 
@@ -90,17 +81,16 @@ Expected environment variable categories:
 ### Backend
 
 - ASPNETCORE_ENVIRONMENT
-- ConnectionStrings__DefaultConnection
+- ConnectionStrings__RespondrDb
 - Authentication settings
-- CORS allowed origins
 - SignalR settings if needed
 - Logging level
 
 ### Frontend
 
-- API base URL
-- SignalR hub URL
-- Build environment name
+- Future API base URL
+- Future SignalR hub URL
+- Future build environment name
 
 ### Database
 
@@ -114,7 +104,7 @@ Expected environment variable categories:
 
 The backend must allow the frontend origin during local development and hosted deployment.
 
-SignalR requires correct handling for:
+SignalR currently requires correct handling for:
 
 - WebSocket connections.
 - Authorization headers or cookies.
@@ -274,12 +264,11 @@ Azure options:
 
 Local deployment is ready when:
 
-- Frontend starts through Docker Compose.
-- Backend starts through Docker Compose.
-- Database starts with persistent volume.
-- Frontend can call backend.
-- Frontend can connect to SignalR.
-- Backend can read/write database.
+- `docker compose config` succeeds.
+- SQL Server starts with a persistent volume.
+- All backend API containers start through Docker Compose.
+- Health endpoints respond successfully.
+- Database-backed endpoints can connect to SQL Server.
 
 Azure deployment is ready when:
 

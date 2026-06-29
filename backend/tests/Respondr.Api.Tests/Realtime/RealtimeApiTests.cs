@@ -27,6 +27,18 @@ public sealed class RealtimeApiTests : IClassFixture<RealtimeApiFactory>
     }
 
     [Fact]
+    public async Task Health_endpoints_return_healthy_status()
+    {
+        var healthResponse = await _client.GetAsync("/api/health");
+        var realtimeHealthResponse = await _client.GetAsync("/api/realtime/health");
+        var databaseHealthResponse = await _client.GetAsync("/api/health/db");
+
+        Assert.Equal(HttpStatusCode.OK, healthResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, realtimeHealthResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, databaseHealthResponse.StatusCode);
+    }
+
+    [Fact]
     public async Task Unauthenticated_client_is_rejected_from_hub()
     {
         var connection = CreateConnection(accessToken: null);

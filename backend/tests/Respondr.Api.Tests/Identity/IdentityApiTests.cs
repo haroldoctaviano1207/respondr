@@ -22,6 +22,16 @@ public sealed class IdentityApiTests : IClassFixture<IdentityApiFactory>
     }
 
     [Fact]
+    public async Task Health_endpoints_return_healthy_status()
+    {
+        var healthResponse = await _client.GetAsync("/api/health");
+        var databaseHealthResponse = await _client.GetAsync("/api/health/db");
+
+        Assert.Equal(HttpStatusCode.OK, healthResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, databaseHealthResponse.StatusCode);
+    }
+
+    [Fact]
     public async Task Login_returns_token_response_for_valid_credentials()
     {
         var response = await _client.PostAsJsonAsync("/api/auth/login", new LoginRequest(
