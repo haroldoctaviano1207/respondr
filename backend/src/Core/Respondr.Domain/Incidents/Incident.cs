@@ -49,6 +49,29 @@ public sealed class Incident : AuditableEntity
 
     public DateTimeOffset? ClosedAt { get; private set; }
 
+    public void UpdateDetails(
+        string title,
+        IncidentType type,
+        IncidentLocation location,
+        string situationSummary,
+        DateTimeOffset reportedAt,
+        DateTimeOffset updatedAt)
+    {
+        Title = title;
+        Type = type;
+        Location = location;
+        IncidentLocationId = location.Id;
+        SituationSummary = situationSummary;
+        ReportedAt = reportedAt;
+        MarkUpdated(updatedAt);
+    }
+
+    public void UpdatePriority(IncidentPriority priority, DateTimeOffset updatedAt)
+    {
+        Priority = priority;
+        MarkUpdated(updatedAt);
+    }
+
     public void UpdateStatus(IncidentStatus status, DateTimeOffset updatedAt)
     {
         Status = status;

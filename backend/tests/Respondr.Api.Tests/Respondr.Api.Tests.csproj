@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
@@ -21,12 +22,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Hosts\Respondr.Dispatch.Api\Respondr.Dispatch.Api.csproj" />
-    <ProjectReference Include="..\..\src\Hosts\Respondr.Identity.Api\Respondr.Identity.Api.csproj" />
-    <ProjectReference Include="..\..\src\Hosts\Respondr.Incidents.Api\Respondr.Incidents.Api.csproj" />
-    <ProjectReference Include="..\..\src\Hosts\Respondr.Notifications.Api\Respondr.Notifications.Api.csproj" />
-    <ProjectReference Include="..\..\src\Hosts\Respondr.Realtime.Api\Respondr.Realtime.Api.csproj" />
-    <ProjectReference Include="..\..\src\Hosts\Respondr.Resources.Api\Respondr.Resources.Api.csproj" />
+    <ProjectReference Include="..\..\src\Hosts\Respondr.Dispatch.Api\Respondr.Dispatch.Api.csproj">
+      <Aliases>dispatchapi</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Hosts\Respondr.Identity.Api\Respondr.Identity.Api.csproj">
+      <Aliases>identityapi</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Hosts\Respondr.Incidents.Api\Respondr.Incidents.Api.csproj">
+      <Aliases>incidentsapi</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Hosts\Respondr.Notifications.Api\Respondr.Notifications.Api.csproj">
+      <Aliases>notificationsapi</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Hosts\Respondr.Realtime.Api\Respondr.Realtime.Api.csproj">
+      <Aliases>realtimeapi</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Hosts\Respondr.Resources.Api\Respondr.Resources.Api.csproj">
+      <Aliases>resourcesapi</Aliases>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\BuildingBlocks\Respondr.Contracts\Respondr.Contracts.csproj" />
     <ProjectReference Include="..\..\src\Core\Respondr.Infrastructure\Respondr.Infrastructure.csproj" />
   </ItemGroup>

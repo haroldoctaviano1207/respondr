@@ -1,6 +1,8 @@
 using Respondr.Application;
 using Respondr.Infrastructure;
+using Respondr.Infrastructure.Authentication;
 using Respondr.Infrastructure.Persistence;
+using Respondr.Infrastructure.Realtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +12,12 @@ var applyMigrations = builder.Configuration.GetValue("Database:ApplyMigrations",
 
 builder.Services
     .AddRespondrApplication()
-    .AddRespondrInfrastructure(connectionString);
+    .AddRespondrInfrastructure(
+        connectionString,
+        configureJwt: options => builder.Configuration.GetSection("Jwt").Bind(options),
+        configureRealtime: options => builder.Configuration.GetSection(RealtimeApiOptions.SectionName).Bind(options));
 
+builder.Services.AddRespondrApiAuthentication(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -24,6 +30,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("/api/health", () => Results.Ok(new
@@ -61,3 +68,5 @@ app.MapGet("/api/health/db", async (RespondrDbContext dbContext, CancellationTok
 app.MapControllers();
 
 app.Run();
+
+public partial class Program;

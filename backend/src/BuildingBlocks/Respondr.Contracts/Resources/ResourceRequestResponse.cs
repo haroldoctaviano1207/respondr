@@ -6,4 +6,6 @@ public sealed record ResourceRequestResponse(
     string ResourceType,
     int Quantity,
     string Status,
-    DateTimeOffset RequestedAt);
+    DateTimeOffset RequestedAt,
+    string Justification,
+    string? DecisionNotes = null);

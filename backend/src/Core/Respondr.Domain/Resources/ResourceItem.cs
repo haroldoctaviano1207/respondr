@@ -21,6 +21,20 @@ public sealed class ResourceItem : AuditableEntity
 
     public Guid? CurrentIncidentId { get; private set; }
 
+    public void AssignToIncident(Guid incidentId, DateTimeOffset updatedAt)
+    {
+        CurrentIncidentId = incidentId;
+        IsAvailable = false;
+        MarkUpdated(updatedAt);
+    }
+
+    public void Release(DateTimeOffset updatedAt)
+    {
+        CurrentIncidentId = null;
+        IsAvailable = true;
+        MarkUpdated(updatedAt);
+    }
+
     private ResourceItem()
         : base(Guid.Empty)
     {
