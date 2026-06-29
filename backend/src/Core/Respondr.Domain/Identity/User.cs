@@ -12,6 +12,7 @@ public sealed class User : AuditableEntity
         FullName = fullName;
         RoleId = roleId;
         IsActive = isActive;
+        MarkCreated(DateTimeOffset.UtcNow);
     }
 
     public string Email { get; private set; }
@@ -25,6 +26,12 @@ public sealed class User : AuditableEntity
     public Role? Role { get; private set; }
 
     public bool IsActive { get; private set; }
+
+    public void UpdatePasswordHash(string passwordHash, DateTimeOffset updatedAt)
+    {
+        PasswordHash = passwordHash;
+        MarkUpdated(updatedAt);
+    }
 
     private User()
         : base(Guid.Empty)

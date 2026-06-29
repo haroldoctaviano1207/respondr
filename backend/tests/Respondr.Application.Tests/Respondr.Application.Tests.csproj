@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Respondr.Application\Respondr.Application.csproj" />
+    <ProjectReference Include="..\..\src\Core\Respondr.Infrastructure\Respondr.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\BuildingBlocks\Respondr.Contracts\Respondr.Contracts.csproj" />
     <ProjectReference Include="..\..\src\BuildingBlocks\Respondr.Shared\Respondr.Shared.csproj" />
   </ItemGroup>
